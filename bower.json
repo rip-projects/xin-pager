@@ -1,0 +1,30 @@
+{
+  "name": "xin-pager",
+  "version": "0.0.1",
+  "authors": [
+    "Ganesha <reekoheek@gmail.com>"
+  ],
+  "description": "Xin 2.0 View.",
+  "keywords": [
+    "web-component",
+    "web-components",
+    "polymer",
+    "polim"
+  ],
+  "main": "xin-pager.html",
+  "license": "MIT",
+  "ignore": [
+    "/.*",
+    "/test/",
+    "/demo/"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.0.0",
+    "xin-app": "xinix-technology/xin-app#~2.0.0",
+    "xin-view": "xinix-technology/xin-view#~2.0.0"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "web-component-tester": "*"
+  }
+}

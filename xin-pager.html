@@ -1,0 +1,154 @@
+<!--
+  @license
+  Copyright (c) 2015 Xinix Technology
+
+  Permission is hereby granted, free of charge, to any person obtaining a
+  copy of this software and associated documentation files (the "Software"),
+  to deal in the Software without restriction, including without limitation
+  the rights to use, copy, modify, merge, publish, distribute, sublicense,
+  and/or sell copies of the Software, and to permit persons to whom the
+  Software is furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+  DEALINGS IN THE SOFTWARE.
+-->
+<link rel="import" href="../polymer/polymer.html">
+
+<!--
+`xin-pager` is a unit that represent page or a single view.
+
+Example:
+
+    <xin-pager></xin-pager>
+
+@demo
+-->
+<dom-module id="xin-pager">
+  <template>
+    <content></content>
+  </template>
+
+  <style>
+    :host {
+      box-sizing: border-box;
+      display: block;
+      position: relative;
+    }
+
+    :host ::content xin-view {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      transform: translate3d(-100%, 0, 0);
+    }
+
+    :host ::content xin-view.animate {
+      transition: .3s all;
+    }
+
+    :host(.view-hidden) {
+      display: none!important;
+    }
+  </style>
+</dom-module>
+
+<script>
+  (function() {
+    'use strict';
+
+    Polymer({
+      is: 'xin-pager',
+
+      properties: {
+
+      },
+
+      add: function(el) {
+        this.views = this.views || [];
+        this.views.push(el);
+      },
+
+      setFocus: function(el) {
+        var index = this.views.indexOf(el);
+        var oldIndex = -1;
+        if (this.focusedEl) {
+          oldIndex = this.views.indexOf(this.focusedEl);
+        }
+
+        var focusedEl = this.focusedEl;
+
+        if (oldIndex < 0) {
+          // console.log('first');
+
+          el.style.transform = 'translate3d(0,0,0)';
+          el.classList.remove('view-hidden');
+          el.classList.add('view-focused');
+        } else if (oldIndex < index) {
+          // console.log('to left');
+
+          el.style.transform = 'translate3d(100%, 0, 0)';
+          el.classList.remove('view-hidden');
+
+          setTimeout(function() {
+            focusedEl.classList.add('animate');
+            el.classList.add('animate');
+
+            focusedEl.style.transform = 'translate3d(-100%, 0, 0)';
+            el.style.transform = 'translate3d(0,0,0)';
+
+            var toLeftTransitionEnd = function() {
+              el.removeEventListener('transitionend', toLeftTransitionEnd);
+              focusedEl.classList.remove('animate');
+              el.classList.remove('animate');
+              focusedEl.classList.remove('view-focused');
+              el.classList.add('view-focused');
+
+              focusedEl.classList.add('view-hidden');
+            }.bind(this);
+
+            el.addEventListener('transitionend', toLeftTransitionEnd);
+          }.bind(this), 50);
+        } else if (oldIndex > index) {
+          // console.log('to right');
+
+          el.style.transform = 'translate3d(-100%, 0, 0)';
+          el.classList.remove('view-hidden');
+
+          setTimeout(function() {
+            focusedEl.classList.add('animate');
+            el.classList.add('animate');
+
+            focusedEl.style.transform = 'translate3d(100%, 0, 0)';
+            el.style.transform = 'translate3d(0,0,0)';
+
+            var toRightTransitionEnd = function() {
+              el.removeEventListener('transitionend', toRightTransitionEnd);
+              focusedEl.classList.remove('animate');
+              el.classList.remove('animate');
+              focusedEl.classList.remove('view-focused');
+              el.classList.add('view-focused');
+
+              focusedEl.classList.add('view-hidden');
+            }.bind(this);
+
+            el.addEventListener('transitionend', toRightTransitionEnd);
+          }.bind(this), 50);
+        }
+
+        this.focusedEl = el;
+      }
+
+    });
+
+  })(this);
+</script>
