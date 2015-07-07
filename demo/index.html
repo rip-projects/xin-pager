@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
-    <title>xin-view demo</title>
+    <title>xin-pager demo</title>
     <script type="text/javascript">
     // make sure to append trailing / for index.html
     // you dont need this chunk if your not on index page
@@ -54,10 +54,15 @@
 
   </head>
   <body unresolved class="fullbleed vertical layout">
+    <template is="dom-bind">
+      <span>{{nodeName}}</span>
+      <span>{{is}}</span>
+    </template>
     <xin-app class="flex vertical layout">
       <template id="layout-main">
         <paper-header-panel class="flex vertical layout">
           <paper-toolbar>
+            <div class="title"><content select="h1.title"></content></div>
             <paper-tabs no-bar="true" selectable="false">
               <paper-tab><a href="#!/">index</a></paper-tab>
               <paper-tab><a href="#!/foo">foo</a></paper-tab>
@@ -66,7 +71,7 @@
               <paper-tab><a href="#!/foo/b">foo/b</a></paper-tab>
             </paper-tabs>
           </paper-toolbar>
-          <div>
+          <div class="flex vertical layout">
             <content></content>
           </div>
         </paper-header-panel>
@@ -74,10 +79,12 @@
 
       <xin-pager viewport class="flex vertical layout">
         <xin-view uri="/" class="flex vertical layout" layout="layout-main">
+          <h1 class="title">Header Index</h1>
           index
         </xin-view>
 
         <xin-view uri="/foo*splat" class="flex vertical layout" layout="layout-main">
+          <h1 class="title">Header foo</h1>
           foo
 
           <a href="#!/foo">foo/-</a>
@@ -99,7 +106,7 @@
         <xin-view uri="/bar" class="flex vertical layout" layout="layout-main">
           bar
         </xin-view>
-      </div>
+      </xin-pager>
 
     </xin-app>
     <script type="text/javascript">
