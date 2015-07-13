@@ -73,79 +73,99 @@ Example:
 
       },
 
-      add: function(el) {
+      add: function(element) {
         this.views = this.views || [];
-        this.views.push(el);
+        this.views.push(element);
       },
 
-      setFocus: function(el) {
-        var index = this.views.indexOf(el);
+      setFocus: function(element) {
+        var index = this.views.indexOf(element);
         var oldIndex = -1;
-        if (this.focusedEl) {
-          oldIndex = this.views.indexOf(this.focusedEl);
+        if (this.$focused) {
+          oldIndex = this.views.indexOf(this.$focused);
         }
 
-        var focusedEl = this.focusedEl;
+        var $focused = this.$focused;
 
         if (oldIndex < 0) {
           // console.log('first');
 
-          el.style.transform = 'translate3d(0,0,0)';
-          el.classList.remove('view-hidden');
-          el.classList.add('view-focused');
+          element.style.transform = 'translate3d(0,0,0)';
+          element.setHidden(false);
+          element.setFocus(true);
         } else if (oldIndex < index) {
           // console.log('to left');
 
-          el.style.transform = 'translate3d(100%, 0, 0)';
-          el.classList.remove('view-hidden');
+          element.style.transform = 'translate3d(100%, 0, 0)';
+          element.setHidden(false);
 
           setTimeout(function() {
-            focusedEl.classList.add('animate');
-            el.classList.add('animate');
+            $focused.classList.add('animate');
+            element.classList.add('animate');
 
-            focusedEl.style.transform = 'translate3d(-100%, 0, 0)';
-            el.style.transform = 'translate3d(0,0,0)';
+            $focused.style.transform = 'translate3d(-100%, 0, 0)';
+            element.style.transform = 'translate3d(0,0,0)';
 
             var toLeftTransitionEnd = function() {
-              el.removeEventListener('transitionend', toLeftTransitionEnd);
-              focusedEl.classList.remove('animate');
-              el.classList.remove('animate');
-              focusedEl.classList.remove('view-focused');
-              el.classList.add('view-focused');
+              element.removeEventListener('transitionend', toLeftTransitionEnd);
+              element.removeEventListener('webkitTransitionEnd', toLeftTransitionEnd);
+              element.removeEventListener('mozTransitionEnd', toLeftTransitionEnd);
+              element.removeEventListener('msTransitionEnd', toLeftTransitionEnd);
+              element.removeEventListener('oTransitionEnd', toLeftTransitionEnd);
+              $focused.classList.remove('animate');
+              element.classList.remove('animate');
 
-              focusedEl.classList.add('view-hidden');
+              $focused.setFocus(false);
+              $focused.setHidden(true);
+
+              element.setFocus(true);
             }.bind(this);
 
-            el.addEventListener('transitionend', toLeftTransitionEnd);
+            element.addEventListener('transitionend', toLeftTransitionEnd, false);
+            element.addEventListener('webkitTransitionEnd', toLeftTransitionEnd, false);
+            element.addEventListener('mozTransitionEnd', toLeftTransitionEnd, false);
+            element.addEventListener('msTransitionEnd', toLeftTransitionEnd, false);
+            element.addEventListener('oTransitionEnd', toLeftTransitionEnd, false);
+
           }.bind(this), 50);
         } else if (oldIndex > index) {
           // console.log('to right');
 
-          el.style.transform = 'translate3d(-100%, 0, 0)';
-          el.classList.remove('view-hidden');
+          element.style.transform = 'translate3d(-100%, 0, 0)';
+          element.setHidden(false);
 
           setTimeout(function() {
-            focusedEl.classList.add('animate');
-            el.classList.add('animate');
+            $focused.classList.add('animate');
+            element.classList.add('animate');
 
-            focusedEl.style.transform = 'translate3d(100%, 0, 0)';
-            el.style.transform = 'translate3d(0,0,0)';
+            $focused.style.transform = 'translate3d(100%, 0, 0)';
+            element.style.transform = 'translate3d(0,0,0)';
 
             var toRightTransitionEnd = function() {
-              el.removeEventListener('transitionend', toRightTransitionEnd);
-              focusedEl.classList.remove('animate');
-              el.classList.remove('animate');
-              focusedEl.classList.remove('view-focused');
-              el.classList.add('view-focused');
+              element.removeEventListener('transitionend', toRightTransitionEnd);
+              element.removeEventListener('webkitTransitionEnd', toRightTransitionEnd);
+              element.removeEventListener('mozTransitionEnd', toRightTransitionEnd);
+              element.removeEventListener('msTransitionEnd', toRightTransitionEnd);
+              element.removeEventListener('oTransitionEnd', toRightTransitionEnd);
 
-              focusedEl.classList.add('view-hidden');
+              $focused.classList.remove('animate');
+              element.classList.remove('animate');
+
+              $focused.setFocus(false);
+              $focused.setHidden(true);
+
+              element.setFocus(true);
             }.bind(this);
 
-            el.addEventListener('transitionend', toRightTransitionEnd);
+            element.addEventListener('transitionend', toRightTransitionEnd, false);
+            element.addEventListener('webkitTransitionEnd', toRightTransitionEnd, false);
+            element.addEventListener('mozTransitionEnd', toRightTransitionEnd, false);
+            element.addEventListener('msTransitionEnd', toRightTransitionEnd, false);
+            element.addEventListener('oTransitionEnd', toRightTransitionEnd, false);
           }.bind(this), 50);
         }
 
-        this.focusedEl = el;
+        this.$focused = element;
       }
 
     });
