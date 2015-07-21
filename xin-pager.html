@@ -43,7 +43,7 @@ Example:
       position: relative;
     }
 
-    :host ::content xin-view {
+    :host ::content .xin-view {
       position: absolute;
       top: 0;
       left: 0;
@@ -52,12 +52,8 @@ Example:
       transform: translate3d(-100%, 0, 0);
     }
 
-    :host ::content xin-view.animate {
+    :host ::content .xin-view.animate {
       transition: .3s all;
-    }
-
-    :host(.view-hidden) {
-      display: none!important;
     }
   </style>
 </dom-module>
@@ -81,29 +77,29 @@ Example:
       setFocus: function(element) {
         var index = this.views.indexOf(element);
         var oldIndex = -1;
-        if (this.$focused) {
-          oldIndex = this.views.indexOf(this.$focused);
+        if (this.focused$) {
+          oldIndex = this.views.indexOf(this.focused$);
         }
 
-        var $focused = this.$focused;
+        var focused$ = this.focused$;
 
         if (oldIndex < 0) {
           // console.log('first');
 
           element.style.transform = 'translate3d(0,0,0)';
-          element.setHidden(false);
+          element.setVisible(true);
           element.setFocus(true);
         } else if (oldIndex < index) {
           // console.log('to left');
 
           element.style.transform = 'translate3d(100%, 0, 0)';
-          element.setHidden(false);
+          element.setVisible(true);
 
           setTimeout(function() {
-            $focused.classList.add('animate');
+            focused$.classList.add('animate');
             element.classList.add('animate');
 
-            $focused.style.transform = 'translate3d(-100%, 0, 0)';
+            focused$.style.transform = 'translate3d(-100%, 0, 0)';
             element.style.transform = 'translate3d(0,0,0)';
 
             var toLeftTransitionEnd = function() {
@@ -112,11 +108,11 @@ Example:
               element.removeEventListener('mozTransitionEnd', toLeftTransitionEnd);
               element.removeEventListener('msTransitionEnd', toLeftTransitionEnd);
               element.removeEventListener('oTransitionEnd', toLeftTransitionEnd);
-              $focused.classList.remove('animate');
+              focused$.classList.remove('animate');
               element.classList.remove('animate');
 
-              $focused.setFocus(false);
-              $focused.setHidden(true);
+              focused$.setFocus(false);
+              focused$.setVisible(false);
 
               element.setFocus(true);
             }.bind(this);
@@ -132,13 +128,13 @@ Example:
           // console.log('to right');
 
           element.style.transform = 'translate3d(-100%, 0, 0)';
-          element.setHidden(false);
+          element.setVisible(true);
 
           setTimeout(function() {
-            $focused.classList.add('animate');
+            focused$.classList.add('animate');
             element.classList.add('animate');
 
-            $focused.style.transform = 'translate3d(100%, 0, 0)';
+            focused$.style.transform = 'translate3d(100%, 0, 0)';
             element.style.transform = 'translate3d(0,0,0)';
 
             var toRightTransitionEnd = function() {
@@ -148,11 +144,11 @@ Example:
               element.removeEventListener('msTransitionEnd', toRightTransitionEnd);
               element.removeEventListener('oTransitionEnd', toRightTransitionEnd);
 
-              $focused.classList.remove('animate');
+              focused$.classList.remove('animate');
               element.classList.remove('animate');
 
-              $focused.setFocus(false);
-              $focused.setHidden(true);
+              focused$.setFocus(false);
+              focused$.setVisible(false);
 
               element.setFocus(true);
             }.bind(this);
@@ -165,7 +161,7 @@ Example:
           }.bind(this), 50);
         }
 
-        this.$focused = element;
+        this.focused$ = element;
       }
 
     });
