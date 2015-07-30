@@ -49,11 +49,19 @@ Example:
       left: 0;
       width: 100%;
       height: 100%;
-      transform: translate3d(-100%, 0, 0);
+      transform: translateX(-100%);
+      -webkit-transform: translateX(-100%);
+      -moz-transform: translateX(-100%);
+      -o-transform: translateX(-100%);
+      -ms-transform: translateX(-100%);
     }
 
     :host ::content .xin-view-behavior.animate {
-      transition: .3s all;
+      transition: .3s transform;
+      -webkit-transition: .3s -webkit-transform;
+      -moz-transition: .3s -moz-transform;
+      -o-transition: .3s -o-transform;
+      -ms-transition: .3s -ms-transform;
     }
   </style>
 </dom-module>
@@ -86,28 +94,33 @@ Example:
         if (oldIndex < 0) {
           // console.log('first');
 
-          element.style.transform = 'translate3d(0,0,0)';
+          this.transform('translateX(0)', element);
+
           element.setVisible(true);
           element.setFocus(true);
         } else if (oldIndex < index) {
-          // console.log('to left');
+          this.transform('translateX(100%)', element);
 
-          element.style.transform = 'translate3d(100%, 0, 0)';
           element.setVisible(true);
 
           setTimeout(function() {
             focused$.classList.add('animate');
             element.classList.add('animate');
 
-            focused$.style.transform = 'translate3d(-100%, 0, 0)';
-            element.style.transform = 'translate3d(0,0,0)';
+            // console.log('animate to left');
+
+            this.transform('translateX(-100%)', focused$);
+            this.transform('translateX(0)', element);
 
             var toLeftTransitionEnd = function() {
+              // console.log('toLeftTransitionEnd');
+
               element.removeEventListener('transitionend', toLeftTransitionEnd);
               element.removeEventListener('webkitTransitionEnd', toLeftTransitionEnd);
               element.removeEventListener('mozTransitionEnd', toLeftTransitionEnd);
               element.removeEventListener('msTransitionEnd', toLeftTransitionEnd);
               element.removeEventListener('oTransitionEnd', toLeftTransitionEnd);
+
               focused$.classList.remove('animate');
               element.classList.remove('animate');
 
@@ -125,19 +138,22 @@ Example:
 
           }.bind(this), 50);
         } else if (oldIndex > index) {
-          // console.log('to right');
+          this.transform('translateX(-100%)', element);
 
-          element.style.transform = 'translate3d(-100%, 0, 0)';
           element.setVisible(true);
 
           setTimeout(function() {
             focused$.classList.add('animate');
             element.classList.add('animate');
 
-            focused$.style.transform = 'translate3d(100%, 0, 0)';
-            element.style.transform = 'translate3d(0,0,0)';
+            // console.log('animate to right');
+
+            this.transform('translateX(100%)', focused$);
+            this.transform('translateX(0)', element);
 
             var toRightTransitionEnd = function() {
+              // console.log('toRightTransitionEnd');
+
               element.removeEventListener('transitionend', toRightTransitionEnd);
               element.removeEventListener('webkitTransitionEnd', toRightTransitionEnd);
               element.removeEventListener('mozTransitionEnd', toRightTransitionEnd);
